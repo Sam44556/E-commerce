@@ -1,14 +1,14 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
-import Products from "../components/catagories"; // Make sure Products is an array of product objects
-
+import axios from "axios";
 const Contextp = createContext();
 
 function Provider({ children }) {
+
   const [query, setQuery] = useState("");
   const [products, setProducts] = useState([]); // Renamecdd for consistency
   const [cartItems, setCartItems] = useState([]);
   const [user, setUser] = useState(null);
-
+ 
   // 🔑 Run this on load to check JWT and decode it
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -22,7 +22,20 @@ function Provider({ children }) {
       }
     }
   }, []);
-  
+    useEffect(() => {
+    // Fetch products from backend API
+    const fetchProducts = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/products`
+        );
+        setProducts(res.data);
+      } catch (err) {
+        console.error("Failed to fetch products:", err);
+      }
+    };
+    fetchProducts();
+  }, []);
   function addItemToCart(item) {
     if (user) {
       setCartItems([...cartItems, item]);
