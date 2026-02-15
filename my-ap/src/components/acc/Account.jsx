@@ -54,7 +54,7 @@ export default function Account() {
     setIsLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:4000/api/users/login', {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/users/login`, {
         email: loginData.email,
         password: loginData.password
       });
@@ -107,7 +107,7 @@ export default function Account() {
     setIsLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:4000/api/users/signup', {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/users/signup`, {
         name: signupData.name,
         email: signupData.email,
         password: signupData.password
@@ -358,7 +358,7 @@ export default function Account() {
           </div>
 
           <div className="grid gap-2">
-            <a href="http://localhost:4000/api/auth/google" className="w-full">
+            <a href={`${process.env.REACT_APP_API_URL}/api/auth/google`} className="w-full">
               <Button variant="outline" className="w-full h-11" type="button">
                 <FcGoogle className="mr-2 h-5 w-5" />
                 Continue with Google

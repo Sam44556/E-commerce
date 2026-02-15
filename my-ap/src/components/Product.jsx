@@ -22,8 +22,8 @@ export default function Product() {
   const fetchProducts = async () => {
     try {
       const url = selectedCategory === 'all'
-        ? 'http://localhost:4000/api/products'
-        : `http://localhost:4000/api/products?category=${selectedCategory}`;
+        ? `${process.env.REACT_APP_API_URL}/api/products`
+        : `${process.env.REACT_APP_API_URL}/api/products?category=${selectedCategory}`;
 
       const response = await axios.get(url);
       setProducts(response.data.products || []);
@@ -36,7 +36,7 @@ export default function Product() {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/api/products/categories');
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/products/categories`);
       setCategories(response.data.categories || []);
     } catch (error) {
       console.error('Error fetching categories:', error);

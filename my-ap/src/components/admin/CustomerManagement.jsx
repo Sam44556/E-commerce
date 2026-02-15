@@ -16,7 +16,7 @@ export default function CustomerManagement() {
     const fetchCustomers = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get('http://localhost:4000/api/admin/customers', {
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/admin/customers`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             setCustomers(response.data.customers || []);

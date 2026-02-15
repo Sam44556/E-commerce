@@ -32,7 +32,7 @@ export default function AdminDashboard() {
     const fetchDashboardStats = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch('http://localhost:4000/api/admin/dashboard/stats', {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/admin/dashboard/stats`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }

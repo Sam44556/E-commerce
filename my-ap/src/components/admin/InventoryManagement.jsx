@@ -38,7 +38,7 @@ export default function InventoryManagement({ onUpdate }) {
     const fetchProducts = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get('http://localhost:4000/api/admin/products', {
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/admin/products`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             setProducts(response.data.products || []);
@@ -117,7 +117,7 @@ export default function InventoryManagement({ onUpdate }) {
                 formDataToSend.append('images', file);
             });
 
-            await axios.post('http://localhost:4000/api/admin/products', formDataToSend, {
+            await axios.post(`${process.env.REACT_APP_API_URL}/api/admin/products`, formDataToSend, {
                 headers: { 
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data'
@@ -161,7 +161,7 @@ export default function InventoryManagement({ onUpdate }) {
 
         try {
             const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:4000/api/admin/products/${id}`, {
+            await axios.delete(`${process.env.REACT_APP_API_URL}/api/admin/products/${id}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
 
@@ -226,7 +226,7 @@ export default function InventoryManagement({ onUpdate }) {
             }
 
             await axios.put(
-                `http://localhost:4000/api/admin/products/${editingProduct._id}`, 
+                `${process.env.REACT_APP_API_URL}/api/admin/products/${editingProduct._id}`, 
                 formDataToSend, 
                 {
                     headers: { 

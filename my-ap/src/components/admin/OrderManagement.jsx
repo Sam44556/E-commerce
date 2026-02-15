@@ -17,7 +17,7 @@ export default function OrderManagement({ onUpdate }) {
     const fetchOrders = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get('http://localhost:4000/api/admin/orders', {
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/admin/orders`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             setOrders(response.data.orders || []);
@@ -32,7 +32,7 @@ export default function OrderManagement({ onUpdate }) {
         try {
             const token = localStorage.getItem('token');
             await axios.patch(
-                `http://localhost:4000/api/admin/orders/${orderId}/status`,
+                `${process.env.REACT_APP_API_URL}/api/admin/orders/${orderId}/status`,
                 { status: newStatus },
                 { headers: { 'Authorization': `Bearer ${token}` } }
             );

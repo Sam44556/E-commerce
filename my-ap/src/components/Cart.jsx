@@ -34,7 +34,7 @@ export default function Cart() {
         return;
       }
 
-      const response = await axios.get('http://localhost:4000/api/cart', {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/cart`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       setCartItems(response.data.cart || []);
@@ -51,7 +51,7 @@ export default function Cart() {
     try {
       const token = localStorage.getItem('token');
       await axios.put(
-        'http://localhost:4000/api/cart',
+        `${process.env.REACT_APP_API_URL}/api/cart`,
         { productId, quantity: newQuantity },
         { headers: { 'Authorization': `Bearer ${token}` } }
       );
@@ -68,7 +68,7 @@ export default function Cart() {
   const removeItem = async (productId) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:4000/api/cart/${productId}`, {
+      await axios.delete(`${process.env.REACT_APP_API_URL}/api/cart/${productId}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 

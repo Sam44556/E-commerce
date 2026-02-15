@@ -33,7 +33,7 @@ export default function SingleProduct() {
 
   const fetchProduct = async () => {
     try {
-      const response = await axios.get(`http://localhost:4000/api/products/${id}`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/products/${id}`);
       setProduct(response.data.product);
     } catch (error) {
       console.error('Error fetching product:', error);
@@ -61,7 +61,7 @@ export default function SingleProduct() {
       }
 
       await axios.post(
-        'http://localhost:4000/api/cart',
+        `${process.env.REACT_APP_API_URL}/api/cart`,
         { productId: product._id, quantity },
         { headers: { 'Authorization': `Bearer ${token}` } }
       );

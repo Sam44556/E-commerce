@@ -100,3 +100,6 @@ process.on('SIGTERM', () => {
   process.exit(0);
 });
 
+// Export for Vercel serverless functions
+module.exports = app;
+

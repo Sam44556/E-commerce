@@ -34,7 +34,7 @@ export default function Checkout() {
         return;
       }
 
-      const response = await axios.get('http://localhost:4000/api/cart', {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/cart`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
@@ -59,7 +59,7 @@ export default function Checkout() {
       
       // Call backend to create Stripe checkout session
       const response = await axios.post(
-        'http://localhost:4000/api/payment/create-checkout-session',
+        `${process.env.REACT_APP_API_URL}/api/payment/create-checkout-session`,
         { shippingAddress },
         { headers: { 'Authorization': `Bearer ${token}` } }
       );
