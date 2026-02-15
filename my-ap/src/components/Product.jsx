@@ -81,37 +81,17 @@ export default function Product() {
               />
             </div>
 
-            {/* Category Filter */}
-            <div className="flex gap-2 flex-wrap">
-              <Button
-                variant={selectedCategory === 'all' ? 'default' : 'outline'}
-                onClick={() => setSelectedCategory('all')}
-                className="h-12"
-              >
-                <Filter className="w-4 h-4 mr-2" />
-                All Products
-              </Button>
-              {categories.map((category) => (
-                <Button
-                  key={category}
-                  variant={selectedCategory === category ? 'default' : 'outline'}
-                  onClick={() => setSelectedCategory(category)}
-                  className="h-12"
-                >
-                  {category}
-                </Button>
-              ))}
-            </div>
+            {/* Category Filter removed: always show all products */}
           </div>
         </div>
 
         {/* Products Grid */}
-        {filteredProducts.length === 0 ? (
+        {products.length === 0 ? (
           <Card className="p-12">
             <div className="text-center">
               <Package className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
               <h3 className="text-2xl font-semibold mb-2">No products found</h3>
-              <p className="text-muted-foreground">Try adjusting your search or filters</p>
+              <p className="text-muted-foreground">Try adjusting your search</p>
             </div>
           </Card>
         ) : (
