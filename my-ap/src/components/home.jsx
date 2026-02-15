@@ -1,4 +1,3 @@
-import { Card, CardDescription, CardHeader, CardTitle } from './ui/card';
 import React, { useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from './ui/button';

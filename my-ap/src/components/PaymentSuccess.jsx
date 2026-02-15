@@ -1,6 +1,5 @@
-import { Link } from 'react-router-dom';
 import React from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import { CheckCircle, Package, ArrowRight } from 'lucide-react';
