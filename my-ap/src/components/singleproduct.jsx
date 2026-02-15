@@ -28,24 +28,23 @@ export default function SingleProduct() {
   const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/products/${id}`);
+        setProduct(response.data.product);
+      } catch (error) {
+        console.error('Error fetching product:', error);
+        toast({
+          title: "Error",
+          description: "Failed to load product details",
+          variant: "destructive"
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchProduct();
-  }, [fetchProduct]);
-
-  const fetchProduct = async () => {
-    try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/products/${id}`);
-      setProduct(response.data.product);
-    } catch (error) {
-      console.error('Error fetching product:', error);
-      toast({
-        title: "Error",
-        description: "Failed to load product details",
-        variant: "destructive"
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [id, toast]);
 
   const handleAddToCart = async () => {
     try {

@@ -23,7 +23,7 @@ export default function Checkout() {
   });
 
   useEffect(() => {
-    const fetchCartTotal = async () => {
+    (async () => {
       try {
         const token = localStorage.getItem('token');
         if (!token) {
@@ -37,8 +37,7 @@ export default function Checkout() {
       } catch (error) {
         toast({ title: 'Error', description: 'Failed to fetch cart total.' });
       }
-    };
-    fetchCartTotal();
+    })();
   }, [navigate, toast]);
 
   const fetchCartTotal = async () => {
