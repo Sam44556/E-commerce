@@ -1,3 +1,4 @@
+import React from 'react';
 import React, { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
@@ -5,8 +6,7 @@ import { Button } from './ui/button';
 import { CheckCircle, Package, ArrowRight } from 'lucide-react';
 
 export default function PaymentSuccess() {
-  const [searchParams] = useSearchParams();
-  const sessionId = searchParams.get('session_id');
+  // Removed unused useEffect, useState, and sessionId
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20 py-12">

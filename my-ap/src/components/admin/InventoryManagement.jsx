@@ -32,6 +32,19 @@ export default function InventoryManagement({ onUpdate }) {
     });
 
     useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/admin/products`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                setProducts(response.data.products || []);
+            } catch (error) {
+                toast({ title: 'Error', description: 'Failed to fetch products.' });
+            } finally {
+                setLoading(false);
+            }
+        };
         fetchProducts();
     }, []);
 

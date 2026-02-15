@@ -4,29 +4,22 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Badge } from './ui/badge';
-import { Search, Filter, ShoppingCart, Star, TrendingUp, Package } from 'lucide-react';
+import { Search, ShoppingCart, Star, TrendingUp, Package } from 'lucide-react'; // Removed Filter
 import axios from 'axios';
 
 export default function Product() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     fetchProducts();
-    fetchCategories();
-  }, [selectedCategory]);
+  }, []); // Only run on mount
 
   const fetchProducts = async () => {
     try {
-      const url = selectedCategory === 'all'
-        ? `${process.env.REACT_APP_API_URL}/api/products`
-        : `${process.env.REACT_APP_API_URL}/api/products?category=${selectedCategory}`;
-
-      const response = await axios.get(url);
-      setProducts(response.data.products || []);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/products`);
+      setProducts(response.data.products || response.data || []);
     } catch (error) {
       console.error('Error fetching products:', error);
     } finally {
@@ -34,14 +27,7 @@ export default function Product() {
     }
   };
 
-  const fetchCategories = async () => {
-    try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/products/categories`);
-      setCategories(response.data.categories || []);
-    } catch (error) {
-      console.error('Error fetching categories:', error);
-    }
-  };
+  // Removed fetchCategories function as it is not used and incorrectly defined
 
   const filteredProducts = products.filter(product =>
     product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||

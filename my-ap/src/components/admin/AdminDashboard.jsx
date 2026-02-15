@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
-import { Button } from '../ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import {
     Package,
@@ -8,8 +7,7 @@ import {
     Users,
     DollarSign,
     TrendingUp,
-    AlertCircle,
-    Plus
+    AlertCircle
 } from 'lucide-react';
 import InventoryManagement from './InventoryManagement';
 import OrderManagement from './OrderManagement';
