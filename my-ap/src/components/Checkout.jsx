@@ -39,7 +39,7 @@ export default function Checkout() {
       }
     };
     fetchCartTotal();
-  }, []);
+  }, [navigate, toast]);
 
   const fetchCartTotal = async () => {
     try {

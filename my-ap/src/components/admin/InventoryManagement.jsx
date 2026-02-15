@@ -46,7 +46,7 @@ export default function InventoryManagement({ onUpdate }) {
             }
         };
         fetchProducts();
-    }, []);
+    }, [toast]);
 
     const fetchProducts = async () => {
         try {

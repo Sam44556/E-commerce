@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import {
     Package,
     ShoppingCart,
     Users,
     DollarSign,
-    TrendingUp,
     AlertCircle
 } from 'lucide-react';
 import InventoryManagement from './InventoryManagement';
