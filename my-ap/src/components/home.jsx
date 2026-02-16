@@ -5,6 +5,8 @@ import { ShoppingBag, TrendingUp, Shield, Truck, Star } from 'lucide-react';
 import { useProvider } from '../context/provider';
 import { useToast } from './ui/use-toast';
 
+import { Card, CardHeader, CardTitle, CardDescription } from './ui/card';
+
 export default function Home() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
