@@ -1,10 +1,11 @@
+const REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI || 'https://shophub-liard-eight.vercel.app/api/auth/google/callback';
 const axios = require('axios');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
 const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
-const REDIRECT_URI = 'http://localhost:4000/api/auth/google/callback';
+
 
 // Step 1: Redirect user to Google login
 exports.googleLogin = (req, res) => {
@@ -68,8 +69,9 @@ exports.googleCallback = async (req, res) => {
       { expiresIn: '7d' }
     );
 
-    // Redirect to frontend with token in URL
-    res.redirect(`http://localhost:3000?token=${token}&userId=${existingUser._id}&email=${existingUser.email}&name=${existingUser.name}&role=${existingUser.role}`);
+    // Redirect to frontend using environment variable
+    const frontendUrl = process.env.FRONTEND_URL || 'https://e-commerce-shop-hazel.vercel.app';
+    res.redirect(`${frontendUrl}?token=${token}&userId=${existingUser._id}&email=${existingUser.email}&name=${existingUser.name}&role=${existingUser.role}`);
   } catch (err) {
     console.error('Google Auth Error:', err.response?.data || err.message || err);
     res.status(500).json({ message: 'Authentication failed' });
