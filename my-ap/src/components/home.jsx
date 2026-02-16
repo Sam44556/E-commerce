@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from './ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { ShoppingBag, TrendingUp, Shield, Truck, Star } from 'lucide-react';
 import { useProvider } from '../context/provider';
 import { useToast } from './ui/use-toast';

@@ -3,7 +3,6 @@ import { Navigate, useLocation } from 'react-router-dom';
 import { useProvider } from '../context/provider';
 
 const ProtectedRoute = ({ children, adminOnly = false }) => {
-    const { user } = useProvider();
     const location = useLocation();
     const token = localStorage.getItem('token');
     const userRole = localStorage.getItem('userRole');
