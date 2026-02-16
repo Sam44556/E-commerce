@@ -13,7 +13,13 @@ const getCart = async (req, res, next) => {
             return next(new HttpError('User not found.', 404));
         }
 
-        res.json({ cart: user.cart });
+        // Calculate total
+        const total = user.cart.reduce((sum, item) => {
+            const price = item.product && item.product.price ? item.product.price : 0;
+            return sum + price * item.quantity;
+        }, 0);
+
+        res.json({ cart: user.cart, total });
     } catch (err) {
         const error = new HttpError('Fetching cart failed.', 500);
         return next(error);
