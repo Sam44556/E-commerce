@@ -22,9 +22,24 @@ export default function Checkout() {
     country: 'USA'
   });
 
-  useEffect(() => {
-    fetchCartTotal();
-  }, [navigate, toast]);
+    useEffect(() => {
+      async function fetchCartTotal() {
+        try {
+          const token = localStorage.getItem('token');
+          if (!token) {
+            navigate('/account');
+            return;
+          }
+          const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/cart`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          setCartTotal(response.data.total);
+        } catch (error) {
+          toast({ title: 'Error', description: 'Failed to fetch cart total.' });
+        }
+      }
+      fetchCartTotal();
+    }, [navigate, toast]);
 
   const fetchCartTotal = async () => {
     try {
