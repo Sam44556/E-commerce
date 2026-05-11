@@ -184,8 +184,111 @@ exports.getPaymentStatus = async (req, res, next) => {
     }
 };
 
+// Confirm payment - called by frontend after Stripe redirect
+// This is the fallback for when webhooks don't work (local dev, webhook failures)
+exports.confirmPayment = async (req, res, next) => {
+    try {
+        const { sessionId } = req.body;
+        const userId = req.userData.userId;
+
+        if (!sessionId) {
+            return next(new HttpError('Session ID is required', 400));
+        }
+
+        // Verify payment with Stripe
+        const session = await stripe.checkout.sessions.retrieve(sessionId);
+        console.log('Confirming payment for session:', session.id, 'Status:', session.payment_status);
+
+        if (session.payment_status !== 'paid') {
+            return next(new HttpError('Payment not completed', 400));
+        }
+
+        // Check if order already exists for this session (webhook may have already created it)
+        const existingOrder = await Order.findOne({ 
+            customer: userId, 
+            orderNumber: { $regex: session.id.slice(-8) }
+        });
+
+        if (existingOrder) {
+            console.log('Order already exists for this session');
+            return res.json({
+                message: 'Order already exists',
+                order: existingOrder
+            });
+        }
+
+        // Get user with cart
+        const user = await User.findById(userId).populate('cart.product');
+
+        if (!user) {
+            return next(new HttpError('User not found', 404));
+        }
+
+        // If cart is empty, order was likely already created by webhook
+        if (!user.cart || user.cart.length === 0) {
+            // Try to find the most recent order for this user
+            const recentOrder = await Order.findOne({ customer: userId }).sort('-createdAt');
+            return res.json({
+                message: 'Cart already cleared - order was processed',
+                order: recentOrder
+            });
+        }
+
+        // Create order items
+        const orderItems = user.cart.map(item => ({
+            product: item.product._id,
+            name: item.product.name,
+            quantity: item.quantity,
+            price: item.product.price,
+            image: item.product.images ? item.product.images[0] : ''
+        }));
+
+        // Generate unique order number
+        const orderNumber = 'ORD-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5).toUpperCase();
+
+        // Create order
+        const order = new Order({
+            orderNumber: orderNumber,
+            customer: userId,
+            items: orderItems,
+            totalAmount: session.amount_total / 100,
+            shippingAddress: JSON.parse(session.metadata.shippingAddress),
+            paymentMethod: 'credit_card',
+            paymentStatus: 'paid',
+            status: 'pending'
+        });
+
+        await order.save();
+        console.log('Order created via confirmPayment:', order._id);
+
+        // Reduce stock for each product
+        for (const item of user.cart) {
+            if (item.product) {
+                item.product.stock = Math.max(0, item.product.stock - item.quantity);
+                item.product.status = item.product.stock > 0 ? 'active' : 'out_of_stock';
+                await item.product.save();
+            }
+        }
+
+        // Add order to user's orders and clear cart
+        user.orders.push(order._id);
+        user.cart = [];
+        await user.save();
+        console.log('Cart cleared, order added to user');
+
+        res.status(201).json({
+            message: 'Order created successfully!',
+            order: order
+        });
+    } catch (error) {
+        console.error('Confirm payment error:', error);
+        return next(new HttpError('Failed to confirm payment and create order', 500));
+    }
+};
+
 module.exports = {
     createCheckoutSession: exports.createCheckoutSession,
     handleWebhook: exports.handleWebhook,
-    getPaymentStatus: exports.getPaymentStatus
+    getPaymentStatus: exports.getPaymentStatus,
+    confirmPayment: exports.confirmPayment
 };

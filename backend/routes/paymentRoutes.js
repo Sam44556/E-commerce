@@ -14,4 +14,7 @@ router.post('/webhook', paymentController.handleWebhook);
 // Get payment status
 router.get('/status/:sessionId', authMiddleware, paymentController.getPaymentStatus);
 
+// Confirm payment and create order (frontend calls this after Stripe redirect)
+router.post('/confirm-payment', authMiddleware, paymentController.confirmPayment);
+
 module.exports = router;

@@ -28,29 +28,42 @@ const upload = multer({
   }
 });
 
-// Upload image to Cloudinary
-const uploadToCloudinary = (fileBuffer, folder = 'products') => {
-  return new Promise((resolve, reject) => {
-    const uploadStream = cloudinary.uploader.upload_stream(
-      {
-        folder: folder,
-        resource_type: 'image',
-        transformation: [
-          { width: 800, height: 800, crop: 'limit' },
-          { quality: 'auto' },
-          { fetch_format: 'auto' }
-        ]
-      },
-      (error, result) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(result.secure_url);
-        }
+// Upload image to Cloudinary with retry logic
+const uploadToCloudinary = async (fileBuffer, folder = 'products', retries = 3) => {
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      const result = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          {
+            folder: folder,
+            resource_type: 'image',
+            timeout: 120000, // 120 second timeout
+            transformation: [
+              { width: 600, height: 600, crop: 'limit' },
+              { quality: 'auto:low' },
+              { fetch_format: 'auto' }
+            ]
+          },
+          (error, result) => {
+            if (error) {
+              reject(error);
+            } else {
+              resolve(result.secure_url);
+            }
+          }
+        );
+        uploadStream.end(fileBuffer);
+      });
+      return result; // Success, return the URL
+    } catch (error) {
+      console.error(`Cloudinary upload attempt ${attempt}/${retries} failed:`, error.message);
+      if (attempt === retries) {
+        throw error; // All retries exhausted
       }
-    );
-    uploadStream.end(fileBuffer);
-  });
+      // Wait before retrying (1s, 2s, 3s...)
+      await new Promise(r => setTimeout(r, attempt * 1000));
+    }
+  }
 };
 
 // Delete image from Cloudinary
