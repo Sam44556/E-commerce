@@ -64,6 +64,7 @@ const addToCart = async (req, res, next) => {
             cart: user.cart
         });
     } catch (err) {
+        console.error('Add to cart error:', err);
         const error = new HttpError('Adding to cart failed.', 500);
         return next(error);
     }

@@ -56,6 +56,7 @@ const getProducts = async (req, res, next) => {
             totalProducts: total
         });
     } catch (err) {
+        console.error('Fetching products error:', err);
         const error = new HttpError('Fetching products failed, please try again.', 500);
         return next(error);
     }

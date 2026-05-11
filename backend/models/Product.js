@@ -64,6 +64,5 @@ const productSchema = new Schema({
 // Index for faster queries
 productSchema.index({ name: 'text', description: 'text' });
 productSchema.index({ category: 1, status: 1 });
-productSchema.index({ sku: 1 });
 
 module.exports = mongoose.model('Product', productSchema);

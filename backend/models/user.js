@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-const uniqueValidator = require('mongoose-unique-validator');
+// Note: mongoose-unique-validator removed - incompatible with Mongoose v9+
+// Mongoose handles unique validation natively now
 
 const Schema = mongoose.Schema;
 
@@ -46,6 +47,5 @@ const userSchema = new Schema({
   timestamps: true
 });
 
-userSchema.plugin(uniqueValidator);
 
 module.exports = mongoose.model('User', userSchema);

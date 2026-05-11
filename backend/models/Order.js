@@ -67,7 +67,6 @@ const orderSchema = new Schema({
 });
 
 // Index for faster queries
-orderSchema.index({ orderNumber: 1 });
 orderSchema.index({ customer: 1, createdAt: -1 });
 orderSchema.index({ status: 1 });
 
